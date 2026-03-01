@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trident Schools — Engage · Enlighten · Empower</title>
+<meta name="description" content="Trident Schools: A family of prep schools and a college in Zambia, committed to unlocking the potential in every child through world-class education.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1a2744;
+    --navy-deep: #0f1a30;
+    --gold: #c9a84c;
+    --gold-light: #e8c87a;
+    --cream: #f8f4ee;
+    --white: #ffffff;
+    --text: #2c2c2c;
+    --text-muted: #6b6b6b;
+    --maroon: #7b2d52;
+    --green-dark: #1e4d3a;
+    --section-pad: clamp(64px, 10vw, 120px);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px clamp(20px, 5vw, 60px);
+    transition: background 0.4s, backdrop-filter 0.4s, box-shadow 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(26,39,68,0.96);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 30px rgba(0,0,0,0.2);
+  }
+  .nav-logo { display: flex; flex-direction: column; gap: 0; }
+  .nav-logo-text { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--white); letter-spacing: 0.08em; line-height: 1; }
+  .nav-logo-sub { font-size: 0.6rem; color: var(--gold-light); letter-spacing: 0.2em; text-transform: uppercase; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.05em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--gold-light); }
+  .nav-cta { background: var(--gold); color: var(--navy-deep); padding: 10px 22px; border-radius: 2px; font-size: 0.8rem; font-weight: 600; text-decoration: none; letter-spacing: 0.06em; transition: background 0.2s, transform 0.2s; white-space: nowrap; }
+  .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+  .nav-hamburger span { width: 24px; height: 2px; background: var(--white); display: block; transition: all 0.3s; }
+  .mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--navy-deep); z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { color: var(--white); text-decoration: none; font-size: 1.4rem; font-family: 'Playfair Display', serif; }
+  .mobile-menu a:hover { color: var(--gold-light); }
+  .mobile-close { position: absolute; top: 24px; right: 24px; background: none; border: none; color: var(--white); font-size: 1.8rem; cursor: pointer; }
+  .mobile-apply { background: var(--gold); color: var(--navy-deep); padding: 14px 36px; font-weight: 600; text-decoration: none; border-radius: 2px; margin-top: 16px; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; height: 100svh; min-height: 560px;
+    display: flex; align-items: flex-end;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: 
+      linear-gradient(to bottom, rgba(15,26,48,0.3) 0%, rgba(15,26,48,0.15) 40%, rgba(15,26,48,0.7) 80%, rgba(15,26,48,0.95) 100%),
+      url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1600&q=80') center/cover no-repeat;
+    transform: scale(1.05);
+    transition: transform 6s ease;
+  }
+  .hero-bg.loaded { transform: scale(1); }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: clamp(40px, 8vw, 80px) clamp(20px, 5vw, 80px);
+    max-width: 780px;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 12px;
+    color: var(--gold-light); font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; font-weight: 500;
+    margin-bottom: 20px; opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
+  }
+  .hero-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--gold-light); }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    font-weight: 700; color: var(--white); line-height: 1.1;
+    margin-bottom: 24px; opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold-light); }
+  .hero-sub {
+    font-size: clamp(0.95rem, 2vw, 1.1rem); color: rgba(255,255,255,0.75); line-height: 1.65; max-width: 520px;
+    margin-bottom: 40px; opacity: 0; animation: fadeUp 0.8s 0.7s forwards;
+  }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 0.9s forwards; }
+  .btn-primary { background: var(--gold); color: var(--navy-deep); padding: 15px 34px; border-radius: 2px; text-decoration: none; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.06em; transition: all 0.25s; }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,0.4); }
+  .btn-outline { border: 1px solid rgba(255,255,255,0.5); color: var(--white); padding: 15px 34px; border-radius: 2px; text-decoration: none; font-weight: 500; font-size: 0.85rem; letter-spacing: 0.06em; transition: all 0.25s; }
+  .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.1); }
+  .hero-scroll {
+    position: absolute; bottom: 36px; right: clamp(20px, 5vw, 60px); z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: rgba(255,255,255,0.5); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+    opacity: 0; animation: fadeUp 1s 1.2s forwards;
+  }
+  .scroll-line { width: 1px; height: 48px; background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent); animation: scrollAnim 2s 1.5s infinite; }
+  @keyframes scrollAnim { 0%,100%{opacity:0.5;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(0.6)} }
+
+  /* ── MARQUEE ── */
+  .marquee-bar { background: var(--navy); padding: 18px 0; overflow: hidden; }
+  .marquee-track { display: flex; gap: 60px; white-space: nowrap; animation: marquee 25s linear infinite; }
+  .marquee-track span { color: rgba(255,255,255,0.5); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; }
+  .marquee-track span b { color: var(--gold-light); font-weight: 500; }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* ── WELCOME ── */
+  .welcome {
+    padding: var(--section-pad) clamp(20px, 5vw, 80px);
+    display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px,6vw,100px); align-items: center;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .welcome-visual { position: relative; }
+  .welcome-img-main {
+    width: 100%; aspect-ratio: 4/5; object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.15);
+  }
+  .welcome-badge {
+    position: absolute; bottom: -24px; right: -24px;
+    background: var(--navy); color: var(--white);
+    padding: 24px 28px; border-radius: 4px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    text-align: center;
+  }
+  .welcome-badge .num { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: var(--gold-light); line-height: 1; }
+  .welcome-badge .label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-top: 4px; }
+  .welcome-text { padding-bottom: 20px; }
+  .section-eyebrow { font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .section-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+  .welcome-text h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem,4vw,3rem); font-weight: 700; color: var(--navy); line-height: 1.15; margin-bottom: 24px; }
+  .welcome-text p { color: var(--text-muted); line-height: 1.75; font-size: 1rem; margin-bottom: 16px; }
+  .welcome-text p:last-of-type { margin-bottom: 36px; }
+  .stats-row { display: flex; gap: 32px; margin-top: 40px; border-top: 1px solid #e8e4dd; padding-top: 32px; }
+  .stat { text-align: left; }
+  .stat .n { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--navy); }
+  .stat .l { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
+
+  /* ── MISSION ── */
+  .mission {
+    background: var(--cream);
+    padding: var(--section-pad) clamp(20px, 5vw, 80px);
+  }
+  .mission-inner { max-width: 1200px; margin: 0 auto; }
+  .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px,6vw,80px); align-items: center; }
+  .mission-text h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem,3.5vw,2.8rem); font-weight: 700; color: var(--navy); line-height: 1.2; margin-bottom: 24px; }
+  .mission-text h2 em { font-style: italic; color: var(--maroon); }
+  .mission-text p { color: var(--text-muted); line-height: 1.75; margin-bottom: 16px; font-size: 1rem; }
+  .mission-image { position: relative; }
+  .mission-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 4px; }
+  .mission-quote-card {
+    position: absolute; top: -20px; left: -20px;
+    background: var(--navy); color: var(--white);
+    padding: 20px 24px; border-radius: 4px; max-width: 240px;
+    box-shadow: 0 16px 50px rgba(0,0,0,0.2);
+  }
+  .mission-quote-card .q { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem; line-height: 1.5; color: var(--gold-light); }
+  .mission-quote-card .attr { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-top: 10px; }
+
+  /* ── VALUES ── */
+  .values-section { background: var(--navy-deep); padding: var(--section-pad) clamp(20px, 5vw, 80px); }
+  .values-inner { max-width: 1200px; margin: 0 auto; }
+  .values-header { text-align: center; margin-bottom: clamp(40px,6vw,64px); }
+  .values-header .section-eyebrow { justify-content: center; color: var(--gold-light); }
+  .values-header .section-eyebrow::before { background: var(--gold-light); }
+  .values-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem,3.5vw,2.8rem); color: var(--white); }
+  .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2px; }
+  .value-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    padding: 40px 32px; transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .value-card::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--gold); transform: scaleX(0); transition: transform 0.3s; transform-origin: left; }
+  .value-card:hover { background: rgba(255,255,255,0.06); transform: translateY(-4px); }
+  .value-card:hover::before { transform: scaleX(1); }
+  .value-icon { font-size: 1.8rem; margin-bottom: 20px; }
+  .value-card h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--white); margin-bottom: 12px; }
+  .value-card p { font-size: 0.88rem; color: rgba(255,255,255,0.5); line-height: 1.7; }
+
+  /* ── SCHOOLS ── */
+  .schools-section { padding: var(--section-pad) clamp(20px, 5vw, 80px); }
+  .schools-inner { max-width: 1200px; margin: 0 auto; }
+  .schools-header { text-align: center; margin-bottom: clamp(40px,6vw,64px); }
+  .schools-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem,3.5vw,2.8rem); color: var(--navy); }
+  .schools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+  .school-card {
+    border-radius: 4px; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    transition: all 0.35s; position: relative;
+    display: flex; flex-direction: column;
+  }
+  .school-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+  .school-card-img { aspect-ratio: 16/9; object-fit: cover; width: 100%; display: block; }
+  .school-card-img-placeholder {
+    aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; color: rgba(255,255,255,0.3);
+  }
+  .school-card-body { padding: 28px 28px 24px; flex: 1; display: flex; flex-direction: column; }
+  .school-badge { display: inline-block; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600; padding: 4px 10px; border-radius: 20px; margin-bottom: 14px; }
+  .school-card h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; margin-bottom: 10px; }
+  .school-card p { font-size: 0.88rem; line-height: 1.65; color: var(--text-muted); flex: 1; margin-bottom: 20px; }
+  .school-card-link { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; text-decoration: none; letter-spacing: 0.06em; transition: gap 0.2s; }
+  .school-card-link:hover { gap: 12px; }
+  .school-card-link::after { content: '→'; }
+
+  .card-college .school-card-img-placeholder { background: var(--navy); }
+  .card-college .school-badge { background: rgba(26,39,68,0.1); color: var(--navy); }
+  .card-college h3 { color: var(--navy); }
+  .card-college .school-card-link { color: var(--navy); }
+
+  .card-prep-solwezi .school-card-img-placeholder { background: var(--maroon); }
+  .card-prep-solwezi .school-badge { background: rgba(123,45,82,0.1); color: var(--maroon); }
+  .card-prep-solwezi h3 { color: var(--maroon); }
+  .card-prep-solwezi .school-card-link { color: var(--maroon); }
+
+  .card-kalumbila .school-card-img-placeholder { background: var(--green-dark); }
+  .card-kalumbila .school-badge { background: rgba(30,77,58,0.1); color: var(--green-dark); }
+  .card-kalumbila h3 { color: var(--green-dark); }
+  .card-kalumbila .school-card-link { color: var(--green-dark); }
+
+  .card-lusaka .school-card-img-placeholder { background: #2d5a8a; }
+  .card-lusaka .school-badge { background: rgba(45,90,138,0.1); color: #2d5a8a; }
+  .card-lusaka h3 { color: #2d5a8a; }
+  .card-lusaka .school-card-link { color: #2d5a8a; }
+
+  /* ── HISTORY ── */
+  .history-section {
+    background: var(--cream);
+    padding: var(--section-pad) clamp(20px, 5vw, 80px);
+  }
+  .history-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px,6vw,80px); align-items: start; }
+  .history-text h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem,3.5vw,2.8rem); color: var(--navy); margin-bottom: 24px; line-height: 1.2; }
+  .history-text p { color: var(--text-muted); line-height: 1.75; margin-bottom: 16px; font-size: 1rem; }
+  .timeline { padding-top: 12px; }
+  .timeline-item { display: flex; gap: 24px; margin-bottom: 32px; }
+  .tl-left { display: flex; flex-direction: column; align-items: center; }
+  .tl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--gold); flex-shrink: 0; margin-top: 4px; }
+  .tl-line { width: 1px; background: #d0c8be; flex: 1; margin-top: 6px; }
+  .tl-year { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--navy); min-width: 60px; }
+  .tl-content h4 { font-weight: 600; font-size: 0.95rem; color: var(--navy); margin-bottom: 4px; }
+  .tl-content p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* ── APPLY CTA ── */
+  .apply-section {
+    background: var(--navy);
+    padding: clamp(64px,10vw,100px) clamp(20px, 5vw, 80px);
+    position: relative; overflow: hidden;
+  }
+  .apply-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(201,168,76,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .apply-inner { max-width: 700px; margin: 0 auto; text-align: center; position: relative; }
+  .apply-inner .section-eyebrow { justify-content: center; color: var(--gold-light); }
+  .apply-inner .section-eyebrow::before { background: var(--gold-light); }
+  .apply-inner h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem,4vw,3.2rem); color: var(--white); line-height: 1.15; margin-bottom: 20px; }
+  .apply-inner p { color: rgba(255,255,255,0.65); font-size: 1rem; line-height: 1.7; margin-bottom: 40px; }
+  .apply-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn-gold { background: var(--gold); color: var(--navy-deep); padding: 16px 40px; border-radius: 2px; text-decoration: none; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.08em; transition: all 0.25s; }
+  .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,0.4); }
+  .btn-ghost { border: 1px solid rgba(255,255,255,0.3); color: var(--white); padding: 16px 40px; border-radius: 2px; text-decoration: none; font-weight: 500; font-size: 0.85rem; letter-spacing: 0.06em; transition: all 0.25s; }
+  .btn-ghost:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
+
+  /* ── CONTACT ── */
+  .contact-section { padding: var(--section-pad) clamp(20px, 5vw, 80px); }
+  .contact-inner { max-width: 1200px; margin: 0 auto; }
+  .contact-header { text-align: center; margin-bottom: clamp(40px,6vw,60px); }
+  .contact-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem,3.5vw,2.5rem); color: var(--navy); }
+  .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: #e8e4dd; border: 1px solid #e8e4dd; border-radius: 4px; overflow: hidden; }
+  .contact-card { background: var(--white); padding: 36px 28px; }
+  .contact-school { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 10px; }
+  .contact-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--navy); margin-bottom: 16px; }
+  .contact-card a { display: block; color: var(--text-muted); font-size: 0.88rem; text-decoration: none; margin-bottom: 6px; transition: color 0.2s; }
+  .contact-card a:hover { color: var(--navy); }
+
+  /* ── FOOTER ── */
+  footer { background: var(--navy-deep); padding: clamp(40px,6vw,64px) clamp(20px, 5vw, 80px) clamp(24px,4vw,40px); }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+  .footer-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; flex-wrap: wrap; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 32px; }
+  .footer-brand .brand-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--white); letter-spacing: 0.05em; }
+  .footer-brand .brand-motto { font-size: 0.72rem; color: var(--gold-light); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 6px; }
+  .footer-brand p { font-size: 0.85rem; color: rgba(255,255,255,0.4); line-height: 1.65; max-width: 280px; margin-top: 16px; }
+  .footer-links { display: flex; gap: 48px; flex-wrap: wrap; }
+  .footer-col h4 { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 16px; }
+  .footer-col a { display: block; color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.85rem; margin-bottom: 10px; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--gold-light); }
+  .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-bottom p { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+  .footer-accreditations { display: flex; align-items: center; gap: 16px; }
+  .accred-badge { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 2px; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s, transform 0.7s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width: 768px) {
+    .nav-links, .nav-cta { display: none; }
+    .nav-hamburger { display: flex; }
+    .welcome { grid-template-columns: 1fr; }
+    .welcome-badge { right: 0; bottom: -16px; }
+    .mission-grid { grid-template-columns: 1fr; }
+    .mission-image { order: -1; }
+    .mission-quote-card { display: none; }
+    .history-inner { grid-template-columns: 1fr; }
+    .stats-row { gap: 20px; }
+    .footer-top { flex-direction: column; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+  }
+  @media(max-width: 480px) {
+    .schools-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-logo">
+    <span class="nav-logo-text">TRIDENT SCHOOLS</span>
+    <span class="nav-logo-sub">Zambia</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#mission">Mission</a></li>
+    <li><a href="#schools">Our Schools</a></li>
+    <li><a href="#history">History</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#apply" class="nav-cta">Apply Now</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="#about" class="mobile-link">About</a>
+  <a href="#mission" class="mobile-link">Mission</a>
+  <a href="#schools" class="mobile-link">Our Schools</a>
+  <a href="#history" class="mobile-link">History</a>
+  <a href="#contact" class="mobile-link">Contact</a>
+  <a href="#apply" class="mobile-apply mobile-link">Apply Now</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Engage · Enlighten · Empower</div>
+    <h1>Unlocking the <em>Potential</em> Within Every Child</h1>
+    <p class="hero-sub">A family of four schools united by a shared mission — preparing young minds to embrace global citizenship in an ever-changing world.</p>
+    <div class="hero-actions">
+      <a href="#apply" class="btn-primary">Apply for Admission</a>
+      <a href="#schools" class="btn-outline">Explore Our Schools</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div>Scroll</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <div class="marquee-track">
+    <span><b>Trident College Solwezi</b></span>
+    <span>·</span>
+    <span><b>Trident Prep Solwezi</b></span>
+    <span>·</span>
+    <span><b>Trident Prep Kalumbila</b></span>
+    <span>·</span>
+    <span><b>Trident Prep Lusaka</b></span>
+    <span>·</span>
+    <span>Cambridge Assessment International Education</span>
+    <span>·</span>
+    <span>ICA International Primary</span>
+    <span>·</span>
+    <span><b>Trident College Solwezi</b></span>
+    <span>·</span>
+    <span><b>Trident Prep Solwezi</b></span>
+    <span>·</span>
+    <span><b>Trident Prep Kalumbila</b></span>
+    <span>·</span>
+    <span><b>Trident Prep Lusaka</b></span>
+    <span>·</span>
+    <span>Cambridge Assessment International Education</span>
+    <span>·</span>
+    <span>ICA International Primary</span>
+  </div>
+</div>
+
+<!-- WELCOME / ABOUT -->
+<section id="about">
+  <div class="welcome">
+    <div class="welcome-visual reveal">
+      <img
+        src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&q=80"
+        alt="Students learning at Trident Schools"
+        class="welcome-img-main"
+        loading="lazy"
+      />
+      <div class="welcome-badge">
+        <div class="num">4</div>
+        <div class="label">Schools Across<br>Zambia</div>
+      </div>
+    </div>
+    <div class="welcome-text">
+      <div class="section-eyebrow">Welcome to Trident</div>
+      <h2>A Shared Mission, Four Exceptional Schools</h2>
+      <p>We are a family of three Preparatory Schools and one College, all united by a single purpose: to unlock the potential within every child and prepare them to embrace global citizenship in an ever-changing world.</p>
+      <p>Our journey began with Trident Prep Solwezi, followed by Trident College Solwezi, Trident Prep Kalumbila, and most recently, Trident Prep Lusaka in 2022. Each school shares the same ethos — excellence, care, and community.</p>
+      <a href="#apply" class="btn-primary" style="display:inline-block; margin-top:8px;">Begin Your Journey</a>
+      <div class="stats-row">
+        <div class="stat"><div class="n">10+</div><div class="l">Years of Excellence</div></div>
+        <div class="stat"><div class="n">4</div><div class="l">Campuses</div></div>
+        <div class="stat"><div class="n">100+</div><div class="l">International Staff</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section id="mission" class="mission-section" style="background:var(--cream); padding:var(--section-pad) clamp(20px,5vw,80px);">
+  <div style="max-width:1200px; margin:0 auto;">
+    <div class="mission-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:clamp(40px,6vw,80px); align-items:center;">
+      <div class="mission-text reveal">
+        <div class="section-eyebrow">Mission &amp; Vision</div>
+        <h2 style="font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3.5vw,2.8rem); color:var(--navy); line-height:1.2; margin-bottom:24px;">Nurturing <em style="font-style:italic;color:var(--maroon);">Critical Thinkers</em> and Problem-Solvers</h2>
+        <p style="color:var(--text-muted); line-height:1.75; margin-bottom:16px; font-size:1rem;">Trident Schools are committed to nurturing critical thinking and problem-solving skills through a meaningful, child-centred education that goes far beyond the classroom.</p>
+        <p style="color:var(--text-muted); line-height:1.75; margin-bottom:16px; font-size:1rem;">With teachers from around the world, we foster a supportive and dynamic environment where students thrive both academically and personally. Rooted in strong Christian values, we embrace all faiths and promote respect and understanding within our diverse community.</p>
+        <p style="color:var(--text-muted); line-height:1.75; font-size:1rem;">Our curriculum extends beyond the classroom — offering vibrant sports, culture, service, and environmental stewardship programmes — ensuring a holistic approach to each child's development.</p>
+      </div>
+      <div style="position:relative;" class="reveal reveal-delay-2">
+        <img
+          src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=700&q=80"
+          alt="Student learning"
+          style="width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:4px; display:block;"
+          loading="lazy"
+        />
+        <div style="position:absolute; bottom:-16px; right:-16px; background:var(--navy); color:var(--white); padding:24px 28px; border-radius:4px; max-width:220px; box-shadow:0 16px 50px rgba(0,0,0,0.2);">
+          <p style="font-family:'Playfair Display',serif; font-style:italic; font-size:0.95rem; line-height:1.5; color:var(--gold-light);">"Prepare them to embrace global citizenship."</p>
+          <p style="font-size:0.62rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-top:10px;">School Mission</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="values-section">
+  <div class="values-inner">
+    <div class="values-header reveal">
+      <div class="section-eyebrow">Core Values</div>
+      <h2 style="font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3.5vw,2.8rem); color:var(--white);">Trident pupils will honour their commitment<br>to live by the values of their school.</h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-card reveal">
+        <div class="value-icon">🪞</div>
+        <h3>Reflection</h3>
+        <p>We believe in the power of reflection — taking time to consider our experiences, strengths, and challenges. Resilience grows from learning through mistakes.</p>
+      </div>
+      <div class="value-card reveal reveal-delay-1">
+        <div class="value-icon">🤝</div>
+        <h3>Respect</h3>
+        <p>We show respect for ourselves, one another, and our environment. A culture of dignity and mutual understanding guides everything we do.</p>
+      </div>
+      <div class="value-card reveal reveal-delay-2">
+        <div class="value-icon">🌱</div>
+        <h3>Responsibility</h3>
+        <p>We take ownership of our actions and their impact on our community. Responsible citizenship begins in the classroom and extends to the world.</p>
+      </div>
+      <div class="value-card reveal reveal-delay-3">
+        <div class="value-icon">🔗</div>
+        <h3>Relationships</h3>
+        <p>We invest in building genuine, caring relationships between students, staff, and families — the foundation of a thriving school community.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCHOOLS -->
+<section id="schools" class="schools-section">
+  <div class="schools-inner">
+    <div class="schools-header reveal">
+      <div class="section-eyebrow">Our Campuses</div>
+      <h2>Four Schools, One Family</h2>
+    </div>
+    <div class="schools-grid">
+      <!-- College -->
+      <div class="school-card card-college reveal">
+        <img src="https://images.unsplash.com/photo-1562774053-701939374585?w=600&q=80" alt="Trident College Solwezi" class="school-card-img" loading="lazy"/>
+        <div class="school-card-body">
+          <span class="school-badge">Secondary · Grades 8–12</span>
+          <h3>Trident College Solwezi</h3>
+          <p>A world-class secondary school offering Cambridge International qualifications, preparing students for universities around the globe.</p>
+          <a href="tel:+260962555363" class="school-card-link">Learn More</a>
+        </div>
+      </div>
+      <!-- Prep Solwezi -->
+      <div class="school-card card-prep-solwezi reveal reveal-delay-1">
+        <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=600&q=80" alt="Trident Preparatory School Solwezi" class="school-card-img" loading="lazy"/>
+        <div class="school-card-body">
+          <span class="school-badge">Preparatory · Grades 1–7</span>
+          <h3>Trident Prep Solwezi</h3>
+          <p>Our founding campus, delivering exceptional primary education at the heart of Solwezi — where the Trident story began.</p>
+          <a href="tel:+260961188683" class="school-card-link">Learn More</a>
+        </div>
+      </div>
+      <!-- Kalumbila -->
+      <div class="school-card card-kalumbila reveal reveal-delay-2">
+        <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=600&q=80" alt="Trident Preparatory School Kalumbila" class="school-card-img" loading="lazy"/>
+        <div class="school-card-body">
+          <span class="school-badge">Preparatory · Grades 1–7</span>
+          <h3>Trident Prep Kalumbila</h3>
+          <p>Serving the Kalumbila mining community with the same rigorous, nurturing education that defines the Trident family.</p>
+          <a href="tel:+260965476352" class="school-card-link">Learn More</a>
+        </div>
+      </div>
+      <!-- Lusaka -->
+      <div class="school-card card-lusaka reveal reveal-delay-3">
+        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=80" alt="Trident Preparatory School Lusaka" class="school-card-img" loading="lazy"/>
+        <div class="school-card-body">
+          <span class="school-badge">Preparatory · Est. 2022</span>
+          <h3>Trident Prep Lusaka</h3>
+          <p>Our newest and fastest-growing campus, bringing the Trident ethos to Zambia's vibrant capital city.</p>
+          <a href="tel:+260760748090" class="school-card-link">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY -->
+<section id="history" class="history-section">
+  <div class="history-inner">
+    <div class="history-text reveal">
+      <div class="section-eyebrow">Our History</div>
+      <h2>A Vision Born Over a Decade Ago</h2>
+      <p>Trident Schools' story began in Zambia's Northwestern Province with a vision to provide high-quality education in Solwezi. The initiative was born from conversations between Andrew Whittall and his uncles, Philip and Matt Pascall, driven by a belief that quality education is the most valuable gift to equip children for success.</p>
+      <p>While First Quantum Minerals (FQM) had already contributed to improving government schools in the region, Trident College was established as a legacy project — a world-class institution that would provide quality education and shape future generations.</p>
+      <p>The Trident model embraces computer literacy, curiosity, empathy, and a sense of civic responsibility.</p>
+    </div>
+    <div class="timeline reveal reveal-delay-2">
+      <div class="timeline-item">
+        <div class="tl-left">
+          <div class="tl-dot"></div>
+          <div class="tl-line"></div>
+        </div>
+        <div>
+          <div class="tl-year">2013</div>
+          <div class="tl-content">
+            <h4>Trident Prep Solwezi Founded</h4>
+            <p>The founding campus opens, bringing world-class primary education to Northwestern Province.</p>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-left">
+          <div class="tl-dot"></div>
+          <div class="tl-line"></div>
+        </div>
+        <div>
+          <div class="tl-year">2015</div>
+          <div class="tl-content">
+            <h4>Trident College Solwezi Opens</h4>
+            <p>Secondary education arrives, offering Cambridge International qualifications to the region.</p>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-left">
+          <div class="tl-dot"></div>
+          <div class="tl-line"></div>
+        </div>
+        <div>
+          <div class="tl-year">2018</div>
+          <div class="tl-content">
+            <h4>Trident Prep Kalumbila</h4>
+            <p>Expansion to the Kalumbila mining community, extending the Trident family to a third campus.</p>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-left">
+          <div class="tl-dot"></div>
+        </div>
+        <div>
+          <div class="tl-year">2022</div>
+          <div class="tl-content">
+            <h4>Trident Prep Lusaka</h4>
+            <p>The newest campus opens in the capital, bringing the Trident ethos to a national audience.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPLY CTA -->
+<section id="apply" class="apply-section">
+  <div class="apply-inner reveal">
+    <div class="section-eyebrow">Admissions</div>
+    <h2>Ready to Join the Trident Family?</h2>
+    <p>Applications are open for all four campuses. We welcome students from diverse backgrounds who are ready to engage, be enlightened, and be empowered.</p>
+    <div class="apply-actions">
+      <a href="mailto:administration@trident-college.com" class="btn-gold">Apply Now</a>
+      <a href="#contact" class="btn-ghost">Contact a School</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <div class="contact-inner">
+    <div class="contact-header reveal">
+      <div class="section-eyebrow">Get in Touch</div>
+      <h2>Contact Our Schools</h2>
+    </div>
+    <div class="contact-grid reveal">
+      <div class="contact-card">
+        <div class="contact-school" style="color:var(--navy);">College</div>
+        <h3>Trident College Solwezi</h3>
+        <a href="tel:+260962555363">+260 962 555 363</a>
+        <a href="mailto:administration@trident-college.com">administration@trident-college.com</a>
+      </div>
+      <div class="contact-card">
+        <div class="contact-school" style="color:var(--maroon);">Prep School</div>
+        <h3>Trident Prep Solwezi</h3>
+        <a href="tel:+260961188683">+260 961 188 683</a>
+        <a href="mailto:TridentPrepSOL@educoreservices.com">TridentPrepSOL@educoreservices.com</a>
+      </div>
+      <div class="contact-card">
+        <div class="contact-school" style="color:var(--green-dark);">Prep School</div>
+        <h3>Trident Prep Kalumbila</h3>
+        <a href="tel:+260965476352">+260 965 476 352</a>
+        <a href="mailto:TridentPrepKAL@educoreservices.com">TridentPrepKAL@educoreservices.com</a>
+      </div>
+      <div class="contact-card">
+        <div class="contact-school" style="color:#2d5a8a;">Prep School</div>
+        <h3>Trident Prep Lusaka</h3>
+        <a href="tel:+260760748090">+260 760 748 09</a>
+        <a href="mailto:tpl@trident-prep.com">tpl@trident-prep.com</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="brand-name">TRIDENT SCHOOLS</div>
+        <div class="brand-motto">Engage · Enlighten · Empower</div>
+        <p>A family of four schools united by a shared mission — unlocking the potential within every child and preparing them to embrace global citizenship.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Schools</h4>
+          <a href="#schools">Trident College Solwezi</a>
+          <a href="#schools">Trident Prep Solwezi</a>
+          <a href="#schools">Trident Prep Kalumbila</a>
+          <a href="#schools">Trident Prep Lusaka</a>
+        </div>
+        <div class="footer-col">
+          <h4>About</h4>
+          <a href="#mission">Mission &amp; Vision</a>
+          <a href="#history">Our History</a>
+          <a href="#about">Values</a>
+          <a href="#apply">Admissions</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="mailto:administration@trident-college.com">General Enquiries</a>
+          <a href="#contact">Campus Contacts</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Trident Schools, Zambia. All rights reserved.</p>
+      <div class="footer-accreditations">
+        <span class="accred-badge">Cambridge International</span>
+        <span class="accred-badge">ICA</span>
+        <span class="accred-badge">ISAZ</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive: true });
+
+  // Hero bg animation
+  window.addEventListener('load', () => {
+    document.getElementById('heroBg').classList.add('loaded');
+  });
+
+  // Mobile menu
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileClose = document.getElementById('mobileClose');
+  hamburger.addEventListener('click', () => mobileMenu.classList.add('open'));
+  mobileClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  });
+
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
